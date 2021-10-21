@@ -1,13 +1,3 @@
-/**
- *        @file app.ts
- *  @repository
- * @application
- *     @summary Application Controller Class.
- * @description This file contains function(s) which returns Application related data.
- *   @functions - version()
- *     @returns Express JSON Response
- */
-
 import { Response, Request } from 'express';
 
 import { apiVersion } from '../providers/version';
