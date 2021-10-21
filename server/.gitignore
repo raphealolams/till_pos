@@ -1,0 +1,10 @@
+src/dist
+src/downloads
+src/node_modules
+/node_modules
+# Files...
+.env
+config/index.ts
+src/*lock.json
+src/*.log
+src/*.log.gz
