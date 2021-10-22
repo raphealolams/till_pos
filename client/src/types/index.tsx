@@ -31,4 +31,5 @@ export interface Products {
   addToCart: (clickedItem: CartItemType) => void;
   removeFromCart: (id: number) => void;
   handleInputChange: (quantity: number) => void;
+  customerName: string;
 }

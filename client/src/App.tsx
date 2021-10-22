@@ -5,37 +5,17 @@ import Product from "./pages/product";
 
 import { CartItemType } from "./types";
 
-const products = [
-  {
-    id: 1,
-    name: "Small Pizza",
-    price: 11.99,
-    description: "10'' pizza for one person",
-    currency: "$",
-    quantity: 1,
-  },
+const getProducts = async (): Promise<CartItemType[]> => {
+  let resp = await (await fetch("http://localhost:9000/v1/products", {
+    method: "GET",
+  })).json();
+  return resp.data;
+};
 
-  {
-    id: 2,
-    name: "Medium Pizza",
-    price: 15.99,
-    description: "12'' Pizza for two persons",
-    currency: "$",
-    quantity: 1,
-  },
-
-  {
-    id: 3,
-    name: "Large Pizza",
-    price: 21.99,
-    description: "15'' Pizza for four persons",
-    currency: "$",
-    quantity: 1,
-  },
-];
-
-const getProducts = async (): Promise<CartItemType[]> => await products;
-// await (await fetch("https://fakestoreapi.com/products")).json();
+const getCustomerName = (): string => {
+  const items = ["Amazon", "Default", "Facebook", "Microsoft"];
+  return items[Math.floor(Math.random() * items.length)] || 'Default';
+};
 
 const App = () => {
   // const [cartOpen, setCartOpen] = useState(false);
@@ -43,7 +23,11 @@ const App = () => {
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     "products",
-    getProducts
+    getProducts,
+  );
+  const { data: customerName, isLoading: customerNameLoading } = useQuery(
+    "customerName",
+    getCustomerName,
   );
 
   const handleAddToCart = (clickedItem: CartItemType) => {
@@ -87,21 +71,24 @@ const App = () => {
   if (isLoading) return <div>Loading.......</div>;
   if (error) return <div>Something went wrong ...</div>;
 
-  console.log(cartItems);
+  console.log(cartItems, customerName);
 
   return (
     <div>
-      {isLoading ? (
-        <div>Loading.......</div>
-      ) : (
-        <Product
-          products={data}
-          addToCart={handleAddToCart}
-          removeFromCart={handleRemoveFromCart}
-          handleInputChange={handleInputChange}
-          quantity={quantity}
-        />
-      )}
+      {isLoading || customerNameLoading
+        ? (
+          <div>Loading.......</div>
+        )
+        : (
+          <Product
+            products={data}
+            addToCart={handleAddToCart}
+            removeFromCart={handleRemoveFromCart}
+            handleInputChange={handleInputChange}
+            quantity={quantity}
+            customerName={customerName || ''}
+          />
+        )}
     </div>
   );
 };

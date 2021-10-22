@@ -16,9 +16,11 @@ const ProductItem: React.FC<ProductItemProps> = ({
         <h4 className="card-title">{name}</h4>
         <p className="card-text">{description}</p>
         <h5 className="card-text">
-          <small>price:</small>
-          {currency}
-          {price}
+          Unit price:&nbsp;
+          <small>
+            {currency}
+            {price}
+          </small>
         </h5>
         <div>
           <button

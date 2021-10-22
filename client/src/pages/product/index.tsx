@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 
 import ProductItem from "../../componentes/products";
 
@@ -10,10 +9,13 @@ export default function Product({
   removeFromCart,
   handleInputChange,
   quantity,
+  customerName
 }: Products) {
   return (
     <div className="container">
       <h3 className="card-title">List of Available Products</h3>
+      <small className="card-title">Customer Name: {customerName}</small>
+
       <hr />
       {products?.map((product, index) => (
         <ProductItem
@@ -29,11 +31,9 @@ export default function Product({
         />
       ))}
       <hr />
-      {/* <Link to="/checkout">
         <button className="btn btn-success float-right">
           Checkout
         </button>
-      </Link> */}
       <br />
       <br />
       <br />
