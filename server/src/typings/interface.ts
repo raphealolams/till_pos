@@ -1,6 +1,4 @@
-
 import { Request } from 'express';
-
 
 export interface TokenBody {
   success: boolean;
@@ -18,4 +16,21 @@ export interface customRequest extends Request {
 export interface createToken {
   token: string;
   tokenId: any;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  password: string;
+  customerName: string;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  currency: string;
+  quantity: number;
+  discountPrice: number;
 }

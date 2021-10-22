@@ -32,4 +32,6 @@ export interface Products {
   removeFromCart: (id: number) => void;
   handleInputChange: (quantity: number) => void;
   customerName: string;
+  totalPrice: number | undefined
+  getCartTotal: () => void
 }

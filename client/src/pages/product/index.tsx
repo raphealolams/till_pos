@@ -9,7 +9,9 @@ export default function Product({
   removeFromCart,
   handleInputChange,
   quantity,
-  customerName
+  customerName,
+  totalPrice,
+  getCartTotal
 }: Products) {
   return (
     <div className="container">
@@ -30,10 +32,15 @@ export default function Product({
           key={index}
         />
       ))}
-      <hr />
-        <button className="btn btn-success float-right">
-          Checkout
-        </button>
+      <button className="btn btn-success center"
+      onClick={() => getCartTotal()}>
+        Checkout
+      </button>
+
+      
+      {totalPrice ? <h3 className="float-right">
+          Total Price: {totalPrice}
+        </h3>: ""}
       <br />
       <br />
       <br />

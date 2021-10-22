@@ -258,6 +258,7 @@ const prepLogData = (req: any, res: any, label: any): any => {
       method: req.method,
       url: req.originalUrl,
       query: req.query,
+      body: req.body,
       hostname: req.hostname,
       ip: req.ip,
       origin: req.header('origin'),

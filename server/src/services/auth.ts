@@ -2,25 +2,18 @@
 
 import jwt from 'njwt';
 import bcrypt from 'bcrypt';
-import moment from 'moment';
 import * as config from '../config';
 
 import { logger } from '../providers/logger';
 
-import {
-  TokenBody,
-  createToken,
-} from '../typings/interface';
+import { TokenBody, createToken, User } from '../typings/interface';
+
+import Users from '../entities/user';
 
 export class UserService {
   expReq?: any;
 
   expRes?: any;
-
-
-  constructor(_user: any) {
- 
-  }
 
   public static async createToken(user: User): Promise<createToken> {
     const server = config.server;
@@ -57,39 +50,39 @@ export class UserService {
   }
 
   // login using username AND password AND get user details AND auth token
-  public static async login(email: string, password: string) {
-    return this.getUserAndAuthToken(email, password);
+  public static async login(username: string, password: string) {
+    return this.getUserAndAuthToken(username, password);
   }
 
   // Gets user details AND auth token
-  public static async getUserAndAuthToken(email: string, password: string) {
+  public static async getUserAndAuthToken(
+    username: string,
+    password: string
+  ): Promise<{ status: boolean; message: string; data: any }> {
     try {
-      const userRepository = getRepository(User);
-      const user = await userRepository.findOne({ email, isActive: true });
+      const user = Users.find(
+        (item) => item.username.trim() === username.trim()
+      );
       if (!user) {
         return {
           status: false,
-          message: messages.errors.user.login,
-          data: {
-            email: ''
-          }
+          message: 'invalid username or password',
+          data: {}
         };
       }
 
       if (!bcrypt.compareSync(password, user.password)) {
         return {
           status: false,
-          message: messages.errors.user.login,
-          data: {
-            email: ''
-          }
+          message: '',
+          data: {}
         };
       }
       const token = await UserService.createToken(user);
       user.password = '';
       return {
         status: true,
-        message: messages.success.user.login,
+        message: '',
         data: {
           ...user,
           ...token
@@ -97,15 +90,13 @@ export class UserService {
       };
     } catch (error) {
       logger.error({
-        message: `UserService.addUser() Error`,
+        message: `UserService Error`,
         stack: error
       });
       return {
         status: false,
-        message: messages.errors.user.login,
-        data: {
-          email: ''
-        }
+        message: 'invalid username or password',
+        data: {}
       };
     }
   }

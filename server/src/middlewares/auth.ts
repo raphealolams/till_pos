@@ -1,25 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/**
- *        @file check_auth.ts
- *  @repository
- * @application
- *     @summary Check Authentication Class
- * @description Authentication middleware that checks logged in user scope
- *     @service - UserService
- *   @functions - check()
- */
-
 import { UserService } from '../services';
 import { Response, Request, NextFunction } from 'express';
 import { ResponseWrapper } from '../helpers/response_wrapper';
-import { User } from '../entities/User';
+
+import Users from '../entities/user';
 
 export class CheckAuth {
-  public async check(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  public async check(req: Request, res: Response, next: NextFunction) {
     const response: ResponseWrapper = new ResponseWrapper(res);
     const token = req.headers.authorization?.split(' ')[1];
 
@@ -39,11 +26,7 @@ export class CheckAuth {
       });
     }
 
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne({
-      id: vToken.token.body.sub,
-      isActive: true
-    });
+    const user = await Users.find((item) => item.id === vToken.token.body.sub);
     if (!user) {
       return response.unauthorized({
         status: false,

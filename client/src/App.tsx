@@ -14,13 +14,14 @@ const getProducts = async (): Promise<CartItemType[]> => {
 
 const getCustomerName = (): string => {
   const items = ["Amazon", "Default", "Facebook", "Microsoft"];
-  return items[Math.floor(Math.random() * items.length)] || 'Default';
+  return items[Math.floor(Math.random() * items.length)] || "Default";
 };
 
 const App = () => {
   // const [cartOpen, setCartOpen] = useState(false);
   const [quantity, setItemQuantity] = useState(1);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
+  const [total, setTotalCartPrice] = useState(0);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     "products",
     getProducts,
@@ -68,6 +69,24 @@ const App = () => {
     setItemQuantity(() => quantity);
   };
 
+  const getCartTotal = async () => {
+    const body = {
+      cartItems,
+      customerName
+    };
+
+    let resp =
+      await (await fetch("http://localhost:9000/v1/products/checkout", {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(body),
+      })).json();
+    
+    setTotalCartPrice(resp.data.total)
+  };
+
   if (isLoading) return <div>Loading.......</div>;
   if (error) return <div>Something went wrong ...</div>;
 
@@ -86,7 +105,9 @@ const App = () => {
             removeFromCart={handleRemoveFromCart}
             handleInputChange={handleInputChange}
             quantity={quantity}
-            customerName={customerName || ''}
+            customerName={customerName || ""}
+            getCartTotal={getCartTotal}
+            totalPrice={total}
           />
         )}
     </div>

@@ -39,6 +39,10 @@ export class ResponseWrapper {
     return this.handle(response, 200, 422);
   }
 
+  public badRequest(response: responseObject): Response {
+    return this.handle(response, 200, 400);
+  }
+
   public unauthorized(response: responseObject): Response {
     return this.handle(response, 200, 401);
   }
